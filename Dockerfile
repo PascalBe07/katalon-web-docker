@@ -35,7 +35,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     echo "katalon" | vncpasswd -f > ~/.vnc/passwd \
     && chmod 600 $HOME/.vnc/passwd
 
-COPY xstartup ~/.vnc/xstartup
+COPY xstartup /root/.vnc/xstartup
 
 # SETUP LOCALE
 RUN apt-get install -y \
@@ -45,12 +45,10 @@ RUN apt-get install -y \
     apt-get install -y firefox-locale-de
 ENV LC_ALL=de_DE
 
-# COMMAND
-# katalon --args -noSplash  -runMode=console -projectPath="/home/AoDKatalon/AoDKatalon.prj" -retry=0 -testSuitePath="Test Suites/WebApp Main" -executionProfile="default" -browserType="Chrome"
-# katalon --args -noSplash  -runMode=console -projectPath="/home/AoDKatalon/AoDKatalon.prj" -retry=0 -testSuitePath="Test Suites/WebApp Main" -executionProfile="default" -browserType="Firefox"
-
-# git clone https://pascal.betting@code.intive.com/stash/scm/qtf/aod-katalon.git
-
 WORKDIR /home
 
-CMD vncserver -geometry 1920x1080 ${DISPLAY} && tail -F /root/.vnc/*:0.log
+COPY entrypoint.sh /usr/local/bin/
+RUN ln -s usr/local/bin/entrypoint.sh /
+
+CMD tail -F /root/.vnc/*:0.log
+ENTRYPOINT ["entrypoint.sh"]
