@@ -45,6 +45,9 @@ RUN apt-get install -y \
     apt-get install -y firefox-locale-de
 ENV LC_ALL=de_DE
 
+# SETUP VIDEO RECORDING
+RUN apt-get install -y recordmydesktop
+
 WORKDIR /home
 
 COPY entrypoint.sh /usr/local/bin/
